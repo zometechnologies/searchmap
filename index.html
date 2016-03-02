@@ -1,1 +1,90 @@
-aaa
+
+<html ng-app="countryApp">
+  <head>
+    <meta charset="utf-8">
+    <title>Angular.js JSON Fetching Example</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="http://techzome.com/geojson/mycs.css">
+
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
+    <script>
+      var countryApp = angular.module('countryApp',[]);
+          countryApp.controller('CountryCtrl', function ($scope, $http){
+
+         var loadData = function(){  
+$http.get('http://api.rxcut.com/1.1/GetGPI10s?search=oxy&uid=1AEF6880-BA65-4F62-99CE-88DEF7AD12EF').success(function(data) {
+              //console.log(data);
+              $scope.country = data.features;
+              $scope.coor=[];
+              for(var i in data.features){
+                $scope.coor.push(data.features[i].geometry);
+              }
+              console.log($scope.coor);
+            });
+         }
+         $scope.switchTabAndLoadData = function(){
+           $scope.tab=2;
+         if(angular.isUndefined($scope.country) || angular.isUndefined($scope.coor)){ 
+               loadData();
+           }
+         };
+          });
+    </script>
+   
+  </head>
+  <body  ng-controller="CountryCtrl">
+    <div  ng-app ng-init="tab=1">
+       <div class="cb" ng-click="tab = 1">tab 1</div>
+        <div class="cb" ng-click="switchTabAndLoadData()">tab 2</div>
+        
+       
+    
+            <div ng-show="tab == 1">
+             <p>hellloollllllllllllo</p>
+            </div>
+
+
+           <div ng-show="tab == 2">
+   
+                <h2>Angular.js JSON Fetching Example</h2>
+    
+   
+
+
+                    <table border=1>
+                    <tr>
+                    <th>type</th>
+                    <th>properties_mag</th>
+                    <th>properties_place</th>
+                    <th>properties_time</th>
+                    <th>properties_upated</th>
+                    <th>properties_tz</th>
+                    <th>properties_url</th>
+                    <th>properties_detail</th>
+                    <th>properties_felt</th>
+                    <th>properties_cdi</th>
+                    <th>properties_mmi</th>
+                    <th>properties_alert</th>
+                    </tr>
+                    <tr ng-repeat="type in country ">
+        
+                    <td>{{type.type}}</td>
+                    <td>{{type.properties.mag}} </td>
+                    <td> {{type.properties.place}} </td>
+                    <td> {{type.properties.time}} </td>
+                    <td> {{type.properties.updated}} </td>
+                    <td> {{type.properties.tz}} </td>
+                    <td> {{type.properties.url}} </td>
+                    <td> {{type.properties.detail}} </td>
+                    <td> {{type.properties.felt}} </td>
+                    <td> {{type.properties.cdi}} </td>
+                    <td> {{type.properties.mmi}} </td>
+                    <td> {{type.properties.alert}} </td>
+                    <td> {{type.geometry.type}} </td>
+                   
+                    </table>
+            </div>
+
+</div>
+  </body>
+</html>
